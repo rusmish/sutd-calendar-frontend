@@ -1,0 +1,494 @@
+/* === Header === */
+.app-header {
+  padding: 20px 20px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.app-header-greeting {
+  color: var(--text-secondary);
+  font-size: 13px;
+  letter-spacing: 0.3px;
+}
+
+.app-header-title {
+  color: var(--text-primary);
+  font-size: 19px;
+  font-weight: 600;
+  margin-top: 3px;
+  letter-spacing: -0.3px;
+}
+
+.app-header-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  border: 1.5px solid var(--accent-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* === Календарь === */
+.calendar-strip {
+  margin: 20px 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.calendar-month {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-transform: capitalize;
+}
+
+.calendar-nav { display: flex; gap: 8px; }
+
+.calendar-nav-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--glass-bg);
+  border: 0.5px solid var(--glass-border);
+  color: var(--text-primary);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 14px 20px 0;
+}
+
+.calendar-wd {
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-tertiary);
+  font-weight: 500;
+  padding: 4px 0;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 4px 20px 0;
+  gap: 2px;
+}
+
+.cal-day {
+  height: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  gap: 3px;
+  position: relative;
+}
+
+.cal-day.other { color: var(--text-muted); }
+.cal-day.weekend { color: rgba(255, 255, 255, 0.45); }
+.cal-day.today {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+  border: 1px solid var(--accent-border);
+}
+
+.cal-day.selected {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.cal-dots {
+  display: flex;
+  gap: 2px;
+  position: absolute;
+  bottom: 4px;
+}
+
+.cal-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+}
+
+.calendar-legend {
+  display: flex;
+  gap: 14px;
+  padding: 12px 20px 0;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.legend-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+/* === Карточки событий === */
+.events-list {
+  margin: 18px 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.event-card {
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+}
+
+.event-bar {
+  width: 3px;
+  align-self: stretch;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.event-body { flex: 1; min-width: 0; }
+
+.event-title {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-subject {
+  color: var(--text-tertiary);
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.event-date-badge {
+  background: var(--glass-bg);
+  border: 0.5px solid var(--glass-border);
+  border-radius: 10px;
+  padding: 6px 10px;
+  text-align: center;
+  flex-shrink: 0;
+  min-width: 46px;
+}
+
+.event-date-day {
+  color: var(--text-primary);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.event-date-month {
+  color: var(--text-tertiary);
+  font-size: 10px;
+  margin-top: 2px;
+  text-transform: uppercase;
+}
+
+/* === Грид предметов / оценок === */
+.subjects-grid {
+  margin: 0 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.subject-card {
+  padding: 14px;
+  cursor: pointer;
+}
+
+.subject-name {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 8px;
+}
+
+.subject-grade {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.subject-grade-num {
+  color: var(--accent);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.subject-grade-max {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.subject-grade-empty {
+  color: var(--text-tertiary);
+  font-size: 13px;
+}
+
+.subject-bar {
+  margin-top: 10px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.subject-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.subject-meta {
+  color: var(--text-tertiary);
+  font-size: 11px;
+  margin-top: 6px;
+}
+
+/* === Нижняя навигация === */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--bg-deep) 60%, transparent);
+}
+
+.bottom-nav-inner {
+  display: flex;
+  background: var(--glass-bg);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 0.5px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 4px;
+  gap: 4px;
+}
+
+.nav-tab {
+  flex: 1;
+  padding: 9px 4px;
+  text-align: center;
+  border-radius: 10px;
+  font-size: 11px;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  font-weight: 500;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  text-decoration: none;
+}
+
+.nav-tab-icon { font-size: 18px; line-height: 1; }
+
+.nav-tab.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 0.5px solid var(--accent-border);
+}
+
+/* === Заголовок страницы === */
+.page-header {
+  display: flex;
+  align-items: center;
+  padding: 18px 20px 8px;
+  gap: 12px;
+}
+
+.page-header-back {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--glass-bg);
+  border: 0.5px solid var(--glass-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.page-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* === Кнопка плавающая === */
+.fab {
+  position: fixed;
+  right: 20px;
+  bottom: 90px;
+  z-index: 5;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--bg-deep);
+  border: none;
+  font-size: 26px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 8px 24px rgba(240, 216, 154, 0.25);
+}
+
+.fab:active { transform: scale(0.92); }
+
+/* === Модалка / Bottom sheet === */
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.2s ease;
+}
+
+.sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 101;
+  background: rgba(28, 24, 20, 0.96);
+  backdrop-filter: blur(20px);
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  border-top: 0.5px solid var(--glass-border);
+  padding: 14px 0 20px;
+  max-height: 80vh;
+  overflow-y: scroll;
+  animation: slideUp 0.28s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.sheet-handle {
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0 auto 14px;
+}
+
+.sheet-title {
+  font-size: 17px;
+  font-weight: 600;
+  padding: 0 20px 12px;
+}
+
+.sheet-actions {
+  display: flex;
+  gap: 10px;
+  padding: 16px 20px 40px;
+}
+
+/* === Калькулятор / список оценок === */
+.grade-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  margin-bottom: 6px;
+  gap: 12px;
+}
+
+.grade-row-info { flex: 1; min-width: 0; }
+.grade-row-name { font-size: 14px; color: var(--text-primary); }
+.grade-row-meta { font-size: 12px; color: var(--text-tertiary); margin-top: 2px; }
+
+.grade-row-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.grade-summary {
+  margin: 20px;
+  padding: 20px;
+  text-align: center;
+}
+
+.grade-summary-percent {
+  font-size: 14px;
+  color: var(--text-tertiary);
+  margin-bottom: 6px;
+}
+
+.grade-summary-big {
+  font-size: 64px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.grade-summary-status {
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.grade-summary-status.pass { color: var(--color-credit); }
+.grade-summary-status.fail { color: var(--color-exam); }
+
+/* === Иконки в круге === */
+.icon-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
