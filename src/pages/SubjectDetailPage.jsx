@@ -12,15 +12,11 @@ export default function SubjectDetailPage() {
   const [addOpen, setAddOpen] = useState(false);
   const [forecastOpen, setForecastOpen] = useState(false);
 
-  // Поля для новой оценки
   const [gName, setGName] = useState('');
   const [gScore, setGScore] = useState('');
-  const [gMax, setGMax] = useState(100);
   const [gWeight, setGWeight] = useState(1);
 
-  // Прогноз
-  const [target, setTarget] = useState(75);
-  const [nextMax, setNextMax] = useState(100);
+  const [target, setTarget] = useState(4);
   const [nextWeight, setNextWeight] = useState(1);
   const [forecast, setForecast] = useState(null);
 
@@ -39,14 +35,16 @@ export default function SubjectDetailPage() {
   const addGrade = async (e) => {
     e.preventDefault();
     if (!gName.trim() || gScore === '') return;
+    const score5 = Number(gScore);
+    if (score5 < 1 || score5 > 5) return alert('Оценка должна быть от 1 до 5');
     await subjectsApi.addGrade(id, {
       name: gName.trim(),
-      score: Number(gScore),
-      max_score: Number(gMax) || 100,
+      score: score5 * 20,
+      max_score: 100,
       weight: Number(gWeight) || 1
     });
     notifySuccess();
-    setGName(''); setGScore(''); setGMax(100); setGWeight(1);
+    setGName(''); setGScore(''); setGWeight(1);
     setAddOpen(false);
     load();
   };
@@ -60,9 +58,10 @@ export default function SubjectDetailPage() {
 
   const calcForecast = async (e) => {
     e.preventDefault();
+    const targetPercent = Number(target) * 20;
     const f = await subjectsApi.forecast(id, {
-      target_percent: Number(target),
-      next_max_score: Number(nextMax),
+      target_percent: targetPercent,
+      next_max_score: 100,
       next_weight: Number(nextWeight)
     });
     setForecast(f);
@@ -86,22 +85,20 @@ export default function SubjectDetailPage() {
         <div className="page-title">{subject.name}</div>
       </div>
 
-      {/* Сводка */}
       <div className="grade-summary glass">
         <div className="grade-summary-percent">
-          {summary.gradesCount > 0 ? `Средний балл ${summary.percent}%` : 'Пока нет оценок'}
+          {summary.gradesCount > 0 ? 'Средний балл' : 'Пока нет оценок'}
         </div>
         <div className="grade-summary-big">
           {summary.grade5 ?? '—'}
         </div>
         {summary.gradesCount > 0 && (
           <div className={'grade-summary-status ' + (summary.passed ? 'pass' : 'fail')}>
-            {summary.passed ? '✓ Зачёт' : '✗ Не сдан (порог ' + subject.pass_threshold + '%)'}
+            {summary.passed ? '✓ Зачёт' : '✗ Не сдан'}
           </div>
         )}
       </div>
 
-      {/* Действия */}
       <div style={{ padding: '0 20px', display: 'flex', gap: 10 }}>
         <button className="btn btn-ghost" style={{ flex: 1 }} onClick={() => { haptic('light'); setForecastOpen(true); }}>
           🎯 Прогноз
@@ -111,7 +108,6 @@ export default function SubjectDetailPage() {
         </button>
       </div>
 
-      {/* Список оценок */}
       <div className="section-title" style={{ marginTop: 24 }}>Оценки</div>
 
       {grades.length === 0 ? (
@@ -122,30 +118,26 @@ export default function SubjectDetailPage() {
       ) : (
         <div style={{ padding: '0 20px' }}>
           {grades.map(g => {
-            const percent = Math.round((g.score / g.max_score) * 100);
+            const grade5 = Math.round(g.score / 20);
             return (
               <div key={g.id} className="grade-row glass" onClick={() => removeGrade(g.id)}>
                 <div className="grade-row-info">
                   <div className="grade-row-name">{g.name}</div>
-                  <div className="grade-row-meta">
-                    {g.score} / {g.max_score} • вес {g.weight} • {percent}%
-                  </div>
+                  <div className="grade-row-meta">вес {g.weight}</div>
                 </div>
-                <div className="grade-row-value">{percent}%</div>
+                <div className="grade-row-value">{grade5}</div>
               </div>
             );
           })}
         </div>
       )}
 
-      {/* Кнопка удаления предмета */}
       <div style={{ padding: '24px 20px' }}>
         <button className="btn btn-danger btn-block" onClick={removeSubject}>
           Удалить предмет
         </button>
       </div>
 
-      {/* Sheet: добавить оценку */}
       <Sheet open={addOpen} onClose={() => setAddOpen(false)} title="Новая оценка">
         <form onSubmit={addGrade}>
           <label className="field-label">Название</label>
@@ -154,17 +146,10 @@ export default function SubjectDetailPage() {
               placeholder="Контрольная 1" required autoFocus />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, padding: '0 20px', marginTop: 14 }}>
-            <div>
-              <div style={{ fontSize: 12, color: 'var(--text-tertiary)', marginBottom: 6 }}>Балл</div>
-              <input className="input" type="number" step="0.1" value={gScore}
-                onChange={e => setGScore(e.target.value)} placeholder="80" required />
-            </div>
-            <div>
-              <div style={{ fontSize: 12, color: 'var(--text-tertiary)', marginBottom: 6 }}>Из</div>
-              <input className="input" type="number" step="0.1" value={gMax}
-                onChange={e => setGMax(e.target.value)} placeholder="100" />
-            </div>
+          <label className="field-label">Оценка (1–5)</label>
+          <div style={{ padding: '0 20px' }}>
+            <input className="input" type="number" min="1" max="5" step="1" value={gScore}
+              onChange={e => setGScore(e.target.value)} placeholder="5" required />
           </div>
 
           <label className="field-label">Вес (1 = обычный)</label>
@@ -182,47 +167,37 @@ export default function SubjectDetailPage() {
         </form>
       </Sheet>
 
-      {/* Sheet: прогноз */}
       <Sheet open={forecastOpen} onClose={() => { setForecastOpen(false); setForecast(null); }} title="Прогноз">
         <form onSubmit={calcForecast}>
           <div style={{ padding: '0 20px', fontSize: 13, color: 'var(--text-tertiary)', marginBottom: 8 }}>
-            Сколько нужно набрать в следующем задании, чтобы выйти на нужный процент
+            Какую оценку нужно получить, чтобы выйти на нужный средний балл
           </div>
 
-          <label className="field-label">Целевой %</label>
+          <label className="field-label">Целевой средний балл (1–5)</label>
           <div style={{ padding: '0 20px' }}>
-            <input className="input" type="number" min="1" max="100" value={target}
+            <input className="input" type="number" min="1" max="5" step="1" value={target}
               onChange={e => setTarget(e.target.value)} />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, padding: '0 20px', marginTop: 14 }}>
-            <div>
-              <div style={{ fontSize: 12, color: 'var(--text-tertiary)', marginBottom: 6 }}>Макс. балл</div>
-              <input className="input" type="number" value={nextMax}
-                onChange={e => setNextMax(e.target.value)} />
-            </div>
-            <div>
-              <div style={{ fontSize: 12, color: 'var(--text-tertiary)', marginBottom: 6 }}>Вес</div>
-              <input className="input" type="number" step="0.1" value={nextWeight}
-                onChange={e => setNextWeight(e.target.value)} />
-            </div>
+          <label className="field-label">Вес следующей оценки</label>
+          <div style={{ padding: '0 20px' }}>
+            <input className="input" type="number" step="0.1" value={nextWeight}
+              onChange={e => setNextWeight(e.target.value)} />
           </div>
 
           {forecast && (
             <div className="glass" style={{ margin: '16px 20px 0', padding: 16, textAlign: 'center' }}>
               {forecast.possible ? (
                 <>
-                  <div style={{ fontSize: 13, color: 'var(--text-tertiary)' }}>Нужно набрать</div>
+                  <div style={{ fontSize: 13, color: 'var(--text-tertiary)' }}>Нужно получить</div>
                   <div style={{ fontSize: 36, fontWeight: 600, color: 'var(--accent)', margin: '4px 0' }}>
-                    {forecast.neededScore}
+                    {Math.ceil(forecast.neededScore / 20)}
                   </div>
-                  <div style={{ fontSize: 13, color: 'var(--text-tertiary)' }}>
-                    ({forecast.neededPercent}% из {nextMax})
-                  </div>
+                  <div style={{ fontSize: 13, color: 'var(--text-tertiary)' }}>из 5</div>
                 </>
               ) : (
                 <div style={{ color: 'var(--color-exam)', fontSize: 14 }}>
-                  Цель {target}% уже {forecast.neededPercent < 0 ? 'достигнута' : 'недостижима'}
+                  Цель {target} уже {forecast.neededPercent < 0 ? 'достигнута' : 'недостижима'}
                 </div>
               )}
             </div>
